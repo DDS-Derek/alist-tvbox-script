@@ -1,3 +1,4 @@
+import cryptg
 from telethon.sync import TelegramClient
 from telethon.tl.types import InputMessagesFilterDocument
 import time
@@ -12,6 +13,7 @@ import docker
 import signal
 
 
+progress_tracker = {'last_downloaded_bytes': 0, 'start_time': time.time()}
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -59,7 +61,6 @@ def unzip(zip_filepath, dest_dir):
 
 
 def display_progress(downloaded_bytes, total_bytes):
-    progress_tracker = {'last_downloaded_bytes': 0, 'start_time': time.time()}
     current_speed = (downloaded_bytes - progress_tracker['last_downloaded_bytes'])/(time.time() - progress_tracker['start_time'])
     progress_tracker['last_downloaded_bytes'] = downloaded_bytes
     progress_tracker['start_time'] = time.time()
