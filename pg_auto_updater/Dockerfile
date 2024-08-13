@@ -26,11 +26,9 @@ ENV LANG=zh_CN.UTF-8 \
 
 RUN apk add --no-cache \
         bash \
-        docker-cli \
         tzdata && \
     rm -rf /tmp/* /root/.cache /var/cache/apk/*
 
 COPY --from=build --chmod=+x /build/dist/pg_auto_updater /usr/bin/pg_auto_updater
-COPY --chmod=755 entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "/usr/bin/pg_auto_updater" ]
