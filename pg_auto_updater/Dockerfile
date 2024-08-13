@@ -1,6 +1,8 @@
 FROM python:3.12-slim-bookworm AS build
 
-RUN pip install --upgrade pip && \
+RUN apt-get update -y && \
+    apt-get install -y build-essential binutils && \
+    pip install --upgrade pip && \
     pip install pyinstaller
 WORKDIR /build
 COPY requirements.txt requirements.txt
