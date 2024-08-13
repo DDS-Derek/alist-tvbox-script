@@ -26,6 +26,7 @@ ENV LANG=zh_CN.UTF-8 \
 
 RUN apk add --no-cache \
         bash \
+        docker-cli \
         tzdata && \
     rm -rf /tmp/* /root/.cache /var/cache/apk/*
 
