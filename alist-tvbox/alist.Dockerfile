@@ -1,12 +1,11 @@
-FROM golang:1.21 as builder
+FROM golang:1.21 AS builder
 WORKDIR /app/
 RUN git clone https://github.com/power721/alist.git /app
 ENV CGO_CFLAGS="-D_LARGEFILE64_SOURCE"
 RUN bash build.sh release docker
 
 ARG TAG
-
-FROM xiaoyaliu/alist:${TAG} as base
+FROM xiaoyaliu/alist:${TAG} AS base
 
 FROM ubuntu:latest
 
