@@ -6,6 +6,8 @@ RUN bash build.sh release docker
 
 ARG TAG
 
+FROM xiaoyaliu/alist:${TAG} as base
+
 FROM ubuntu:latest
 
 RUN set -ex && \
@@ -34,10 +36,10 @@ WORKDIR /opt/alist/
 VOLUME [ "/opt/alist/data/" ]
 
 COPY --from=builder /app/bin/alist ./
-COPY --from=xiaoyaliu/alist:${TAG} /var/lib/data.zip /var/lib/data.zip
-COPY --from=xiaoyaliu/alist:${TAG} /entrypoint.sh /entrypoint.sh
-COPY --from=xiaoyaliu/alist:${TAG} /updateall /updateall
-COPY --from=xiaoyaliu/alist:${TAG} /docker.version /docker.version
+COPY --from=base /var/lib/data.zip /var/lib/data.zip
+COPY --from=base /entrypoint.sh /entrypoint.sh
+COPY --from=base /updateall /updateall
+COPY --from=base /docker.version /docker.version
 
 ENTRYPOINT ["/entrypoint.sh"]
 
