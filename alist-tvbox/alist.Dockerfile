@@ -10,6 +10,8 @@ FROM xiaoyaliu/alist:${TAG} AS base
 
 FROM ubuntu:latest
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN set -ex && \
     apt-get update && \
     apt-get upgrade -y && \
