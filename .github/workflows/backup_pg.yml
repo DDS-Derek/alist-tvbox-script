@@ -1,0 +1,29 @@
+name: backup pg
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  ptools:
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@master
+
+      -
+        name: Backup
+        run: |
+          git clone https://github.com/alantang1977/pg.git pg
+          rm -rf pg/.git
+          cp PG_README.txt pg/README.txt
+          ls -al pg
+
+      - name: Deploy to dist branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./pg
+          publish_branch: pg
