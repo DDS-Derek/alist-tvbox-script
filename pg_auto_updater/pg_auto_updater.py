@@ -74,7 +74,7 @@ def download(config_dir, api_id, api_hash):
     with TelegramClient(f"{config_dir}/updater", api_id, api_hash) as client:
         messages = client.get_messages(channel_username, None, filter=InputMessagesFilterDocument)
         for message in messages:
-            if message.media.document.attributes[-1].file_name.endswith('.zip'):
+            if message.media.document.attributes[-1].file_name.startswith('pg') and message.media.document.attributes[-1].file_name.endswith('.zip'):
                 client.download_media(message=message, file='./downloads/pg.zip', progress_callback=display_progress)
                 logging.info('文件已下载')
                 break
