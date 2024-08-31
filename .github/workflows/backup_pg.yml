@@ -28,4 +28,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./pg
           publish_branch: pg
-          keep_files: true
+          exclude_assets: '.nojekyll'
