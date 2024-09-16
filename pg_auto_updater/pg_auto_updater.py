@@ -40,18 +40,21 @@ def load_config(config_dir):
 
 
 def restart_container(container_name):
-    client = docker.from_env()
-    containers = client.containers.list(all=True)
-    for container in containers:
-        if container.name == container_name:
-            try:
-                container.restart()
-                logging.info(f'容器 {container_name} 已成功重启.')
-            except Exception as e:
-                logging.error(f'容器 {container_name} 重启失败. Reason: {str(e)}')
-            finally:
-                client.close()
-                break
+    if container_name != "close":
+        client = docker.from_env()
+        containers = client.containers.list(all=True)
+        for container in containers:
+            if container.name == container_name:
+                try:
+                    container.restart()
+                    logging.info(f'容器 {container_name} 已成功重启.')
+                except Exception as e:
+                    logging.error(f'容器 {container_name} 重启失败. Reason: {str(e)}')
+                finally:
+                    client.close()
+                    break
+    else:
+        logging.info('跳过重启容器')
 
 
 def unzip(zip_filepath, dest_dir):
@@ -80,7 +83,7 @@ def download(config_dir, api_id, api_hash):
                 break
 
 
-def move_files(pg_data_dir):
+def move_files(config_dir, pg_data_dir):
     for filename in os.listdir(pg_data_dir):
         file_path = os.path.join(pg_data_dir, filename)
         try:
@@ -92,6 +95,11 @@ def move_files(pg_data_dir):
             logging.error(f'删除 {file_path} 时出错。原因: {e}')
     for filename in os.listdir('./temp'):
         shutil.move(os.path.join('./temp', filename), pg_data_dir)
+    if os.path.exists(f"{config_dir}/tokenm.json"):
+        logging.info("复制 tokenm.json 配置文件")
+        shutil.copy(f"{config_dir}/tokenm.json", f"{pg_data_dir}/lib/tokenm.json")
+    else:
+        logging.info("不存在配置文件，跳过复制 tokenm.json 配置文件")
 
 
 def main():
@@ -120,10 +128,10 @@ def main():
                 os.remove('./downloads/pg.zip')
             download(config_dir, config["api_id"], config["api_hash"])
             unzip('./downloads/pg.zip', './temp')
-            move_files(pg_data_dir)
+            move_files(config_dir, pg_data_dir)
             time.sleep(2)
             restart_container(config["tvbox_container_name"])
-            logging.info(f"本次运行完成，等待 24H 后下一次运行")
+            logging.info("本次运行完成，等待 24H 后下一次运行")
             time.sleep(24*60*60)
     except KeyboardInterrupt:
         logging.info('PG 更新助手关闭中...')
