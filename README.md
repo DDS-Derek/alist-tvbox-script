@@ -7,6 +7,10 @@ alist-tvbox 自用脚本
 ### Alist-Tvbox 安装脚本（支持armv7）
 
 ```shell
+bash -c "$(curl --insecure -fsSL https://ddsrem.com/script/alist_tvbox_update_xiaoya.sh)"
+```
+
+```shell
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/DDS-Derek/alist-tvbox-script/master/update_xiaoya.sh)"
 ```
 
@@ -40,4 +44,14 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
         network_mode: host
         image: ddsderek/pg_auto_updater:latest
+```
+
+## pg_tgsearch_docker
+
+```shell
+bash -c "$(curl --insecure -fsSL https://ddsrem.com/script/pg_tgsearch_docker.sh)"
+```
+
+```shell
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/DDS-Derek/alist-tvbox-script/master/pg_tgsearch_docker.sh)"
 ```
