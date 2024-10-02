@@ -1,6 +1,6 @@
 # alist-tvbox-script
 
-alist-tvbox 自用脚本
+自用，仅供学习交流。
 
 ## 安装脚本
 
