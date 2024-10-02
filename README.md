@@ -55,3 +55,11 @@ bash -c "$(curl --insecure -fsSL https://ddsrem.com/script/pg_tgsearch_docker.sh
 ```shell
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/DDS-Derek/alist-tvbox-script/master/pg_tgsearch_docker.sh)"
 ```
+
+## Repository address
+
+- https://github.com/fish2018/ZX
+- https://github.com/fish2018/PG
+- https://github.com/alantang1977/pg
+- https://github.com/alantang1977/X
+- https://github.com/qist/tvbox
