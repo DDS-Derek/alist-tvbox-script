@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "感谢：TG佬@nobody"
+
 echo "下载运行文件中..."
 curl --insecure -fSL https://slink.ltd/https://github.com/fish2018/PG/archive/refs/heads/main.zip -o main.zip
 echo "解压文件中..."
@@ -18,7 +20,7 @@ x86_64 | amd64)
 	;;
 *)
 	echo "未知的架构 $(uname -m) unknown architecture"
-	#exit 1
+	exit 1
 	;;
 esac
 
