@@ -45,6 +45,7 @@ function install_pg_tgsearch_docker() {
 
     if ! docker pull ddstomo/pg_tgsearch:latest; then
         ERROR "ddstomo/pg_tgsearch:latest 镜像拉取失败！"
+        exit 1
     fi
 
     docker run -d \
