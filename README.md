@@ -41,3 +41,6 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/DDS-Derek/alist-tvbox-sc
 - https://github.com/alantang1977/pg
 - https://github.com/alantang1977/X
 - https://github.com/qist/tvbox
+- https://hub.docker.com/r/ddstomo/zx_tgseach
+- https://hub.docker.com/r/ddstomo/pg_tgsearch
+- https://github.com/power721/alist-tvbox
