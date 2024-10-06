@@ -34,6 +34,16 @@ bash -c "$(curl --insecure -fsSL https://ddsrem.com/script/pg_tgsearch_termux.sh
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/DDS-Derek/alist-tvbox-script/master/pg_tgsearch_termux.sh)"
 ```
 
+## zx_tgsearch_termux
+
+```shell
+bash -c "$(curl --insecure -fsSL https://ddsrem.com/script/zx_tgsearch_termux.sh)"
+```
+
+```shell
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/DDS-Derek/alist-tvbox-script/master/zx_tgsearch_termux.sh)"
+```
+
 ## Repository address
 
 - https://github.com/fish2018/ZX
