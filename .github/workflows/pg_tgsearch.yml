@@ -74,8 +74,8 @@ jobs:
         name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v4
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
+          username: ${{ secrets.S_DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ secrets.DOCKER_USERNAME }}/pg_tgsearch
+          repository: ${{ secrets.S_DOCKER_USERNAME }}/pg_tgsearch
           short-description: pg tgsearch docker
           readme-filepath: ./pg_tgsearch/README.md
