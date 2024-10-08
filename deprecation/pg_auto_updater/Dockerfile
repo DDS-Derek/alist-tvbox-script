@@ -1,4 +1,4 @@
-FROM python:3.12-slim-bookworm AS build
+FROM python:3.13-slim-bookworm AS build
 
 RUN apt-get update -y && \
     apt-get install -y build-essential binutils && \
