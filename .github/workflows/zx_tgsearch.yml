@@ -49,9 +49,9 @@ jobs:
           mkdir -p zx_tgseach/linux/arm/v7
           mkdir -p zx_tgseach/linux/amd64
           ls -al zx_tgseach
-          curl -L -o ./zx_tgseach/linux/arm/v7/tgsearch 'https://github.com/juejijianghuaa/telegram-channel-video-downloader/raw/refs/heads/main/tgsou-armV7'
-          curl -L -o ./zx_tgseach/linux/arm64/tgsearch 'https://github.com/juejijianghuaa/telegram-channel-video-downloader/raw/refs/heads/main/tgsou-arm64'
-          curl -L -o ./zx_tgseach/linux/amd64/tgsearch 'https://github.com/juejijianghuaa/telegram-channel-video-downloader/raw/refs/heads/main/tgsou-linux'
+          curl -L -o ./zx_tgseach/linux/arm/v7/tgsearch 'https://gitlab.com/tvbox2/telegram-channel-video-downloader/-/raw/main/tgsou-armV7?ref_type=heads&inline=false'
+          curl -L -o ./zx_tgseach/linux/arm64/tgsearch 'https://gitlab.com/tvbox2/telegram-channel-video-downloader/-/raw/main/tgsou-arm64?ref_type=heads&inline=false'
+          curl -L -o ./zx_tgseach/linux/amd64/tgsearch 'https://gitlab.com/tvbox2/telegram-channel-video-downloader/-/raw/main/tgsou-linux?ref_type=heads&inline=false'
           ls -al zx_tgseach/linux
 
       - 
