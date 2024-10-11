@@ -26,14 +26,16 @@ jobs:
           mkdir -p pg_tgsearch/linux/arm/v7
           mkdir -p pg_tgsearch/linux/amd64
           git clone https://github.com/fish2018/PG.git PG
+          cd PG/
+          VERSION=$(basename tgsearch* | sed -n 's/.*\.\([0-9]*-[0-9]*\)\..*/\1/p')
+          cd ..
+          echo "${VERSION}"
           unzip PG/tgsearch* -d PG/
           ls -al pg_tgsearch/
           mv PG/tgsearch.arm32v7 ./pg_tgsearch/linux/arm/v7/tgsearch
           mv PG/tgsearch.arm64v8 ./pg_tgsearch/linux/arm64/tgsearch
           mv PG/tgsearch.x86_64 ./pg_tgsearch/linux/amd64/tgsearch
           ls -al pg_tgsearch/linux
-          cd PG/
-          VERSION=$(basename tgsearch* | sed -n 's/.*\.\([0-9]*-[0-9]*\)\..*/\1/p')
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
 
       - 
