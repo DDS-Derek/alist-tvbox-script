@@ -46,8 +46,13 @@ function install_pg_tgsearch_docker() {
     INFO "请输入您的 api_proxy（选填，回车默认为空）"
     read -erp "API_PROXY:" API_PROXY
 
-    INFO "请输入您的 api_download_image（选填，回车默认为空）"
+    INFO "请输入您的 api_download_image（选填，回车默认 1）"
     read -erp "API_DOWNLOAD_IMAGE:" API_DOWNLOAD_IMAGE
+    [[ -z "${API_DOWNLOAD_IMAGE}" ]] && API_DOWNLOAD_IMAGE="1"
+
+    INFO "请输入您的 api_download_video（选填，回车默认 1）"
+    read -erp "API_DOWNLOAD_VIDEO:" API_DOWNLOAD_VIDEO
+    [[ -z "${API_DOWNLOAD_VIDEO}" ]] && API_DOWNLOAD_VIDEO="1"
 
     INFO "请输入您的 cache_dir（选填，回车默认 /cache）"
     read -erp "CACHE_DIR:" CACHE_DIR
@@ -71,6 +76,7 @@ function install_pg_tgsearch_docker() {
         -e API_SESSION_V1="${API_SESSION_V1}" \
         -e API_PROXY="${API_PROXY}" \
         -e API_DOWNLOAD_IMAGE="${API_DOWNLOAD_IMAGE}" \
+        -e API_DOWNLOAD_VIDEO="${API_DOWNLOAD_VIDEO}" \
         -e CACHE_DIR="${CACHE_DIR}" \
         -v "${VOLUME_DIR}/cache:${CACHE_DIR}" \
         -v "${VOLUME_DIR}/tmp:/tmp" \
