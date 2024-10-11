@@ -18,6 +18,24 @@ jobs:
         name: Checkout
         uses: actions/checkout@master
 
+      -
+        name: Get
+        id: get
+        run: |
+          mkdir -p pg_tgsearch/linux/arm64
+          mkdir -p pg_tgsearch/linux/arm/v7
+          mkdir -p pg_tgsearch/linux/amd64
+          git clone https://github.com/fish2018/PG.git PG
+          unzip PG/tgsearch* -d PG/
+          ls -al pg_tgsearch/
+          mv PG/tgsearch.arm32v7 ./pg_tgsearch/linux/arm/v7/tgsearch
+          mv PG/tgsearch.arm64v8 ./pg_tgsearch/linux/arm64/tgsearch
+          mv PG/tgsearch.x86_64 ./pg_tgsearch/linux/amd64/tgsearch
+          ls -al pg_tgsearch/linux
+          cd PG/
+          VERSION=$(basename tgsearch* | sed -n 's/.*\.\([0-9]*-[0-9]*\)\..*/\1/p')
+          echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+
       - 
         name: Docker meta
         id: meta
@@ -26,6 +44,7 @@ jobs:
           images: ${{ secrets.S_DOCKER_USERNAME }}/pg_tgsearch
           tags: |
             type=raw,value=latest
+            type=raw,value=${{ steps.get.outputs.VERSION }}
 
       - 
         name: Set Up QEMU
@@ -41,20 +60,6 @@ jobs:
         with:
           username: ${{ secrets.S_DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      -
-        name: Get
-        run: |
-          mkdir -p pg_tgsearch/linux/arm64
-          mkdir -p pg_tgsearch/linux/arm/v7
-          mkdir -p pg_tgsearch/linux/amd64
-          git clone https://github.com/fish2018/PG.git PG
-          unzip PG/tgsearch* -d PG/
-          ls -al pg_tgsearch
-          mv PG/tgsearch.arm32v7 ./pg_tgsearch/linux/arm/v7/tgsearch
-          mv PG/tgsearch.arm64v8 ./pg_tgsearch/linux/arm64/tgsearch
-          mv PG/tgsearch.x86_64 ./pg_tgsearch/linux/amd64/tgsearch
-          ls -al pg_tgsearch/linux
 
       - 
         name: Build
