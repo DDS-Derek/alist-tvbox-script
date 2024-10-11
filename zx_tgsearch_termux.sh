@@ -19,7 +19,7 @@ x86_64 | amd64)
 	;;
 esac
 
-if ! curl --insecure -fSL "https://github.com/juejijianghuaa/telegram-channel-video-downloader/raw/refs/heads/main/${FILE_NAME}" -o ./tgsou; then
+if ! curl --insecure -fSL "https://gitlab.com/tvbox2/telegram-channel-video-downloader/-/raw/main/${FILE_NAME}?ref_type=heads&inline=false" -o ./tgsou; then
 	echo "下载失败，请确保您可以访问 github.com"
 	exit 1
 fi
