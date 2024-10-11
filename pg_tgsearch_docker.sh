@@ -49,8 +49,13 @@ function install_pg_tgsearch_docker() {
     INFO "请输入您的 api_download_image（选填，回车默认为空）"
     read -erp "API_DOWNLOAD_IMAGE:" API_DOWNLOAD_IMAGE
 
-    INFO "请输入您的 cache_dir（选填，回车默认为空）"
+    INFO "请输入您的 cache_dir（选填，回车默认 /cache）"
     read -erp "CACHE_DIR:" CACHE_DIR
+    [[ -z "${CACHE_DIR}" ]] && CACHE_DIR="/cache"
+
+    INFO "请输入您的挂载目录，用于存放缓存文件（选填，回车默认 $(pwd)/pg_tgsearch）"
+    read -erp "VOLUME_DIR:" VOLUME_DIR
+    [[ -z "${VOLUME_DIR}" ]] && VOLUME_DIR="$(pwd)/pg_tgsearch"
 
     if ! docker pull ddstomo/pg_tgsearch:latest; then
         ERROR "ddstomo/pg_tgsearch:latest 镜像拉取失败！"
@@ -67,6 +72,8 @@ function install_pg_tgsearch_docker() {
         -e API_PROXY="${API_PROXY}" \
         -e API_DOWNLOAD_IMAGE="${API_DOWNLOAD_IMAGE}" \
         -e CACHE_DIR="${CACHE_DIR}" \
+        -v "${VOLUME_DIR}/cache:${CACHE_DIR}" \
+        -v "${VOLUME_DIR}/tmp:/tmp" \
         --restart=always \
         ddstomo/pg_tgsearch:latest
 
