@@ -26,13 +26,16 @@ function install_pg_tgsearch_docker() {
 
     while true; do
         INFO "请输入您的 session（必填）"
-        read -erp "STRINGSESSION:" STRINGSESSION
-        if [ -n "${STRINGSESSION}" ]; then
+        read -erp "API_SESSION:" API_SESSION
+        if [ -n "${API_SESSION}" ]; then
             break
         else
             INFO "此选项为必填项！"
         fi
     done
+
+    INFO "请输入您的 api_session_v1（选填，回车默认为空）"
+    read -erp "API_SESSION_V1:" API_SESSION_V1
 
     INFO "请输入您的 api_id（选填，回车默认为空）"
     read -erp "API_ID:" API_ID
@@ -42,6 +45,12 @@ function install_pg_tgsearch_docker() {
 
     INFO "请输入您的 api_proxy（选填，回车默认为空）"
     read -erp "API_PROXY:" API_PROXY
+
+    INFO "请输入您的 api_download_image（选填，回车默认为空）"
+    read -erp "API_DOWNLOAD_IMAGE:" API_DOWNLOAD_IMAGE
+
+    INFO "请输入您的 cache_dir（选填，回车默认为空）"
+    read -erp "CACHE_DIR:" CACHE_DIR
 
     if ! docker pull ddstomo/pg_tgsearch:latest; then
         ERROR "ddstomo/pg_tgsearch:latest 镜像拉取失败！"
@@ -53,8 +62,11 @@ function install_pg_tgsearch_docker() {
         -p 10199:10199 \
         -e API_ID="${API_ID}" \
         -e API_HASH="${API_HASH}" \
-        -e STRINGSESSION="${STRINGSESSION}" \
+        -e API_SESSION="${API_SESSION}" \
+        -e API_SESSION_V1="${API_SESSION_V1}" \
         -e API_PROXY="${API_PROXY}" \
+        -e API_DOWNLOAD_IMAGE="${API_DOWNLOAD_IMAGE}" \
+        -e CACHE_DIR="${CACHE_DIR}" \
         --restart=always \
         ddstomo/pg_tgsearch:latest
 
