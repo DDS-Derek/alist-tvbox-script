@@ -22,6 +22,72 @@ function WARN() {
     echo -e "${WARN} ${1}"
 }
 
+function container_update() {
+
+    local run_image remove_image pull_image
+    if docker inspect ddsderek/runlike:latest > /dev/null 2>&1; then
+        local_sha=$(docker inspect --format='{{index .RepoDigests 0}}' ddsderek/runlike:latest 2> /dev/null | cut -f2 -d:)
+        remote_sha=$(curl -s -m 10 "https://hub.docker.com/v2/repositories/ddsderek/runlike/tags/latest" | grep -o '"digest":"[^"]*' | grep -o '[^"]*$' | tail -n1 | cut -f2 -d:)
+        if [ "$local_sha" != "$remote_sha" ]; then
+            docker rmi ddsderek/runlike:latest
+            docker pull "ddsderek/runlike:latest"
+        fi
+    else
+        docker pull "ddsderek/runlike:latest"
+    fi
+    INFO "获取 ${1} 容器信息中..."
+    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp ddsderek/runlike -p "${@}" > "/tmp/container_update_${*}"
+    if [ -n "${container_update_extra_command}" ]; then
+        eval "${container_update_extra_command}"
+    fi
+    run_image=$(docker container inspect -f '{{.Config.Image}}' "${@}")
+    # shellcheck disable=SC2086
+    remove_image=$(docker images -q ${run_image})
+    local retries=0
+    local max_retries=3
+    while [ $retries -lt $max_retries ]; do
+        if docker pull "${run_image}"; then
+            INFO "${1} 镜像拉取成功！"
+            break
+        else
+            WARN "${1} 镜像拉取失败，正在进行第 $((retries + 1)) 次重试..."
+            retries=$((retries + 1))
+        fi
+    done
+    if [ $retries -eq $max_retries ]; then
+        ERROR "镜像拉取失败，已达到最大重试次数！"
+        return 1
+    else
+        pull_image=$(docker images -q "${run_image}")
+        if ! docker stop "${@}" > /dev/null 2>&1; then
+            if ! docker kill "${@}" > /dev/null 2>&1; then
+                docker rmi "${run_image}"
+                ERROR "更新失败，停止 ${*} 容器失败！"
+                return 1
+            fi
+        fi
+        INFO "停止 ${*} 容器成功！"
+        if ! docker rm --force "${@}" > /dev/null 2>&1; then
+            ERROR "更新失败，删除 ${*} 容器失败！"
+            return 1
+        fi
+        INFO "删除 ${*} 容器成功！"
+        if [ "${pull_image}" != "${remove_image}" ]; then
+            INFO "删除 ${remove_image} 镜像中..."
+            docker rmi "${remove_image}" > /dev/null 2>&1
+        fi
+        if bash "/tmp/container_update_${*}"; then
+            rm -f "/tmp/container_update_${*}"
+            INFO "${*} 更新成功"
+            return 0
+        else
+            ERROR "更新失败，创建 ${*} 容器失败！"
+            return 1
+        fi
+    fi
+
+}
+
 function install_pg_tgsearch_docker() {
 
     while true; do
@@ -87,6 +153,16 @@ function install_pg_tgsearch_docker() {
 
 }
 
+function update_pg_tgsearch_docker() {
+
+    for i in $(seq -w 3 -1 0); do
+        echo -en "即将开始更新 PG tgsearch${Blue} $i ${Font}\r"
+        sleep 1
+    done
+    container_update pg_tgsearch
+
+}
+
 function uninstall_pg_tgsearch_docker() {
 
     for i in $(seq -w 3 -1 0); do
@@ -105,9 +181,10 @@ function main_pg_tgsearch_docker() {
     echo -e "——————————————————————————————————————————————————————————————————————————————————"
     echo -e "${Blue}PG tgsearch${Font}\n"
     echo -e "1、安装"
-    echo -e "2、卸载"
+    echo -e "2、更新"
+    echo -e "3、卸载"
     echo -e "——————————————————————————————————————————————————————————————————————————————————"
-    read -erp "请输入数字 [1-2]:" num
+    read -erp "请输入数字 [1-3]:" num
     case "$num" in
     1)
         clear
@@ -115,11 +192,15 @@ function main_pg_tgsearch_docker() {
         ;;
     2)
         clear
+        update_pg_tgsearch_docker
+        ;;
+    3)
+        clear
         uninstall_pg_tgsearch_docker
         ;;
     *)
         clear
-        ERROR '请输入正确数字 [1-2]'
+        ERROR '请输入正确数字 [1-3]'
         main_pg_tgsearch_docker
         ;;
     esac
