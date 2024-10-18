@@ -10,6 +10,7 @@ WORKDIR /app
 
 COPY --chmod=755 $TARGETPLATFORM/tgsearch /app/tgsearch
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
+COPY version /version
 
 RUN apk --no-cache add \
         tzdata \

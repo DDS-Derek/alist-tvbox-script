@@ -9,4 +9,6 @@ if [ -n "${CACHE_DIR}" ]; then
     chown tgsearch:tgsearch -R "${CACHE_DIR}"
 fi
 
+echo "当前 tgsearch 版本：$(cat /version)"
+
 exec su-exec tgsearch:tgsearch "$@"

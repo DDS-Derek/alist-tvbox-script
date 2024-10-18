@@ -36,6 +36,7 @@ jobs:
           mv PG/tgsearch.arm64v8 ./pg_tgsearch/linux/arm64/tgsearch
           mv PG/tgsearch.x86_64 ./pg_tgsearch/linux/amd64/tgsearch
           ls -al pg_tgsearch/linux
+          echo "${VERSION}" > ./pg_tgsearch/version
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
 
       - 
